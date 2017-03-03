@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 
+import java.util.ArrayList;
+
 public class BattleActivity extends AppCompatActivity {
     BattleCardsPageAdapter adapterViewPager;
 
@@ -16,7 +18,7 @@ public class BattleActivity extends AppCompatActivity {
         final HorizontalInfiniteCycleViewPager infiniteCycleViewPager =
                 (HorizontalInfiniteCycleViewPager) findViewById(R.id.viewpager);
 
-        adapterViewPager = new BattleCardsPageAdapter(this, null);
+        adapterViewPager = new BattleCardsPageAdapter(this, new ArrayList<Card>());
         infiniteCycleViewPager.setAdapter(adapterViewPager);
 
 
