@@ -1,4 +1,17 @@
 <resources>
-    <string name="app_name">BattleCardsIB</string>
-    <string name="lorem_ipsum">Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim. Nunc tincidunt ante vitae massa. Duis ante orci, molestie vitae, vehicula venenatis, tincidunt ac, pede. Nulla accumsan, elit sit</string>
+    <string name="app_name">Croftle</string>
+    <string name="lorem_ipsum">Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.</string>
+
+
+    <string name="enter_code">Enter a Code:</string>
+
+    <!--Buttons-->
+    <string name="btn_join">Join</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Erros -->
+    <string name="code_blank_error">Code cannot be blank</string>
+
+    <!--Loadings-->
+    <string name="creating_game">Creating game, please wait...</string>
 </resources>

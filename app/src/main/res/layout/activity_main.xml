@@ -4,12 +4,12 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#bacecc"
     tools:context="com.ib.cards.battle.battlecardsib.MainActivity">
 
 
@@ -20,10 +20,13 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/tv_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/main_text_color"
             android:textSize="40sp"
-            android:text="Battle Cards IB"/>
+            android:textStyle="bold|italic" />
 
 
     </LinearLayout>
@@ -37,21 +40,45 @@
 
 
         <LinearLayout
-            android:id="@+id/ll_create"
+            android:id="@+id/ll_join"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_margin="5dp"
-            android:background="@color/colorAccent"
-            android:orientation="vertical"></LinearLayout>
+            android:layout_weight="1"
+            android:background="@drawable/shape_menu"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Join"
+                android:textColor="@color/main_text_color"
+                android:textSize="30sp"
+                android:textStyle="bold|italic" />
+
+        </LinearLayout>
 
 
         <LinearLayout
+            android:id="@+id/ll_create"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"></LinearLayout>
+            android:background="@drawable/shape_menu"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Create new Game"
+                android:textColor="@color/main_text_color"
+                android:textSize="30sp"
+                android:textStyle="bold|italic" />
+
+        </LinearLayout>
 
 
     </LinearLayout>
