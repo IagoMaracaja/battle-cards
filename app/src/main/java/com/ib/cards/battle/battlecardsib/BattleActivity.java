@@ -1,13 +1,13 @@
 package com.ib.cards.battle.battlecardsib;
 
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 
 public class BattleActivity extends AppCompatActivity {
     BattleCardsPageAdapter adapterViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,8 +16,15 @@ public class BattleActivity extends AppCompatActivity {
         final HorizontalInfiniteCycleViewPager infiniteCycleViewPager =
                 (HorizontalInfiniteCycleViewPager) findViewById(R.id.viewpager);
 
-        adapterViewPager = new BattleCardsPageAdapter(this);
+        adapterViewPager = new BattleCardsPageAdapter(this, null);
         infiniteCycleViewPager.setAdapter(adapterViewPager);
+
+
+    }
+
+
+    public void generateMockItens(){
+
     }
 
 
