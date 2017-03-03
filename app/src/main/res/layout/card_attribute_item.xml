@@ -17,6 +17,7 @@
             android:src="@drawable/hp_icon" />
 
         <TextView
+            android:id="@+id/tv_hp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -39,6 +40,7 @@
             android:src="@drawable/energy_icon" />
 
         <TextView
+            android:id="@+id/tv_energy"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -61,6 +63,7 @@
             android:src="@drawable/power" />
 
         <TextView
+            android:id="@+id/tv_power"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"

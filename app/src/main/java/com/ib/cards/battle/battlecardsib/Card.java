@@ -13,6 +13,8 @@ public class Card {
     private int level;
     private int image;
     private String description;
+    private String name;
+    private int power;
 
     public int getHp() {
         return hp;
@@ -68,5 +70,21 @@ public class Card {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
     }
 }
