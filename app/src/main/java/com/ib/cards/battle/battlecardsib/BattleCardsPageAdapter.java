@@ -37,7 +37,7 @@ public class BattleCardsPageAdapter extends PagerAdapter {
     public Object instantiateItem(final ViewGroup container, final int position) {
         final View view;
 
-            view = mLayoutInflater.inflate(R.layout.card_item, container, false);
+            view = mLayoutInflater.inflate(R.layout.card_item2, container, false);
 
             /*final VerticalInfiniteCycleViewPager verticalInfiniteCycleViewPager =
                     (VerticalInfiniteCycleViewPager) view.findViewById(R.id.viewpager);
