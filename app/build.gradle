@@ -31,5 +31,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.github.devlight:infinitecycleviewpager:1.0.2'
     compile 'com.github.imangazalievm:circlemenu:1.0.2'
+    compile 'com.romainpiel.shimmer:library:1.4.0@aar'
     testCompile 'junit:junit:4.12'
 }

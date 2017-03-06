@@ -1,21 +1,24 @@
 package com.ib.cards.battle.battlecardsib;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.imangazaliev.circlemenu.CircleMenu;
 import com.imangazaliev.circlemenu.CircleMenuButton;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 
 public class BattleRoundActivity extends AppCompatActivity {
 
@@ -48,12 +51,16 @@ public class BattleRoundActivity extends AppCompatActivity {
     private int mMyTotalHP;
     private int mOpTotalHP;
 
+    private boolean alreadyUseCureSpell;
+    private boolean alreadyUseEnergySpell;
+
 
     private Card mOpCard;
     private Card mMyCard;
     private int mOpTotalEnergy;
     private int mMyTotalEnergy;
     private AlertDialog mAlertDialog;
+    private Dialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +144,20 @@ public class BattleRoundActivity extends AppCompatActivity {
                     case R.id.magic:
                         doMagicAttack();
                         break;
+                    case R.id.fab_cure:
+                        if (!alreadyUseCureSpell) {
+                            doCure();
+                            alreadyUseCureSpell = true;
+                        }
+                        break;
+                    case R.id.fab_energy:
+                        if (!alreadyUseEnergySpell) {
+                            doEnergy();
+                            alreadyUseEnergySpell = true;
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -156,6 +177,10 @@ public class BattleRoundActivity extends AppCompatActivity {
 
         updateHPProgress(hpResult, false);
         updateEnergyProgress(energyResult, true);
+
+        if (hpResult <= 0) {
+            victory();
+        }
     }
 
     private void doMagicAttack() {
@@ -168,14 +193,19 @@ public class BattleRoundActivity extends AppCompatActivity {
 
         updateHPProgress(hpResult, false);
         updateEnergyProgress(energyResult, true);
+
+        if (hpResult <= 0) {
+            victory();
+        }
     }
 
     private void updateHPProgress(int hpProgressValue, boolean isMyHP) {
         int progressHP = 0;
-        int actualProgress;
+
         if (isMyHP) {
-            actualProgress = mHPProgressMe.getProgress();
-            if (hpProgressValue > 0) {
+            if (hpProgressValue > mMyTotalHP) {
+                progressHP = FULL;
+            } else if (hpProgressValue > 0) {
                 progressHP = (hpProgressValue * 100) / mMyTotalHP;
                 this.mTvActualHpMe.setText(Integer.toString(hpProgressValue));
             } else {
@@ -184,8 +214,9 @@ public class BattleRoundActivity extends AppCompatActivity {
             }
             this.mHPProgressMe.setProgress(progressHP);
         } else {
-            actualProgress = mHPProgressOp.getProgress();
-            if (hpProgressValue > 0) {
+            if (hpProgressValue > mOpTotalHP) {
+                progressHP = FULL;
+            } else if (hpProgressValue > 0) {
                 progressHP = (hpProgressValue * 100) / mOpTotalHP;
                 this.mTvActualHpOp.setText(Integer.toString(hpProgressValue));
             } else {
@@ -199,21 +230,22 @@ public class BattleRoundActivity extends AppCompatActivity {
 
     private void updateEnergyProgress(int energyProgressValue, boolean isMyHP) {
         int progressEnergy = 0;
-        int actualProgress;
+
         if (isMyHP) {
-            actualProgress = mHPProgressMe.getProgress();
-            if (energyProgressValue > 0) {
+            if (energyProgressValue > mMyTotalEnergy) {
+                progressEnergy = FULL;
+            } else if (energyProgressValue > 0) {
                 progressEnergy = (energyProgressValue * 100) / mMyTotalEnergy;
                 this.mTvActualEnergyMe.setText(Integer.toString(energyProgressValue));
             } else {
                 progressEnergy = 0;
                 this.mTvActualEnergyMe.setText("0");
             }
-
             this.mEnergyProgressMe.setProgress(progressEnergy);
         } else {
-            actualProgress = mHPProgressOp.getProgress();
-            if (energyProgressValue > 0) {
+            if (energyProgressValue > mOpTotalEnergy) {
+                progressEnergy = FULL;
+            } else if (energyProgressValue > 0) {
                 progressEnergy = (energyProgressValue * 100) / mOpTotalEnergy;
                 this.mTvActualEnergyOp.setText(Integer.toString(energyProgressValue));
             } else {
@@ -227,8 +259,8 @@ public class BattleRoundActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         openDialogToLeftRoom();
+        //super.onBackPressed();
     }
 
     /**
@@ -247,15 +279,16 @@ public class BattleRoundActivity extends AppCompatActivity {
 
             view.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View arg0) {
-                    mAlertDialog.dismiss();
-                    mAlertDialog = null;
+                    defeat();
+
                 }
             });
 
             okBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: 06/03/17 Generate defeat automatically
+                    mAlertDialog.dismiss();
+                    mAlertDialog = null;
                 }
             });
 
@@ -269,4 +302,121 @@ public class BattleRoundActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void doCure() {
+        int actualHp = Integer.parseInt(mTvActualHpMe.getText().toString());
+        actualHp += 3;
+        mTvActualHpMe.setText(Integer.toString(actualHp));
+        if (actualHp > mMyTotalHP) {
+            actualHp = mMyTotalHP;
+        }
+        mMyCard.setHp(actualHp);
+        updateHPProgress(actualHp, true);
+
+        int actualEnergy = Integer.parseInt(mTvActualEnergyMe.getText().toString());
+        actualEnergy -= 3;
+        if (actualEnergy <= 0) {
+            actualEnergy = 0;
+        }
+        mTvActualEnergyMe.setText(Integer.toString(actualEnergy));
+        mMyCard.setEnergy(actualEnergy);
+        updateEnergyProgress(actualEnergy, true);
+
+    }
+
+    private void doEnergy() {
+        int actualHp = Integer.parseInt(mTvActualHpMe.getText().toString());
+        actualHp -= 3;
+        if (actualHp <= 0) {
+            actualHp = 0;
+        }
+        mTvActualHpMe.setText(Integer.toString(actualHp));
+        mMyCard.setHp(actualHp);
+        updateHPProgress(actualHp, true);
+
+        int actualEnergy = Integer.parseInt(mTvActualEnergyMe.getText().toString());
+        actualEnergy += 3;
+        if (actualEnergy > mMyTotalEnergy) {
+            actualEnergy = mMyTotalEnergy;
+        }
+        mTvActualEnergyMe.setText(Integer.toString(actualEnergy));
+        updateEnergyProgress(actualEnergy, true);
+    }
+
+    private void victory() {
+        openDialogBattleResults(null, true);
+    }
+
+    private void defeat() {
+        super.onBackPressed();
+    }
+
+    /**
+     * open dialog
+     */
+    public void openDialogBattleResults(final String message, boolean isVictory) {
+
+        mProgressDialog = new Dialog(this, R.style.cust_dialog);
+        mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mProgressDialog.setContentView(R.layout.layout_victory);
+
+        ShimmerTextView tx = (ShimmerTextView) mProgressDialog.findViewById(R.id.message_results);
+        if (message != null) {
+            tx.setText(message);
+        }
+
+        Button btnOk = (Button) mProgressDialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BattleRoundActivity.super.onBackPressed();
+            }
+        });
+
+        Shimmer shimmer = new Shimmer();
+        shimmer.start(tx);
+
+        mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+
+    }
+
+    private void closeDialogBattleResults() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.cancel();
+            mProgressDialog = null;
+        }
+    }
+
+    private void receiveMagicAttack(int magicPower, int energy){
+        int myHp = this.mMyCard.getHp();
+        int hpResult = myHp - magicPower;
+
+        mOpCard.setHp(hpResult);
+        mMyCard.setEnergy(energy);
+
+        updateHPProgress(hpResult, true);
+        updateEnergyProgress(energy, false);
+
+        if (hpResult <= 0) {
+            defeat();
+        }
+    }
+
+    private void receiveNormalAttack(int power, int energy){
+        int myHp = this.mMyCard.getHp();
+        int hpResult = myHp - power;
+
+        mOpCard.setHp(hpResult);
+        mMyCard.setEnergy(energy);
+
+        updateHPProgress(hpResult, true);
+        updateEnergyProgress(energy, false);
+
+        if (hpResult <= 0) {
+            defeat();
+        }
+    }
+
 }

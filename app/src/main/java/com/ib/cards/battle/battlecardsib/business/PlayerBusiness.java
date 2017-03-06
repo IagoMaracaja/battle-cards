@@ -1,12 +1,8 @@
 package com.ib.cards.battle.battlecardsib.business;
 
-import android.util.Log;
-
 import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
 
 import org.json.JSONObject;
-
-import io.socket.client.Ack;
 
 /**
  * Created by Bruno on 03/03/2017.
@@ -14,32 +10,40 @@ import io.socket.client.Ack;
 
 public class PlayerBusiness {
 
-    public String response_server = null;
     private static PlayerBusiness playerBusiness = null;
+    public String response_server = null;
     private ServerInstanceBusiness serverInstance = ServerInstanceBusiness.getInstance();
-    private PlayerBusiness(){}
+
+    private PlayerBusiness() {
+    }
 
     public static PlayerBusiness getInstance() {
-        if(playerBusiness==null){
+        if (playerBusiness == null) {
             playerBusiness = new PlayerBusiness();
         }
         return playerBusiness;
     }
 
-    public String create_game(String hash){
+    public String create_game(String hash) {
         serverInstance.SOCKET.emit("create_game", hash);
-        while(response_server == null){
-            try { Thread.sleep(1000); } catch (InterruptedException e) { }
+        while (response_server == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
         }
         String aux = response_server;
         response_server = null;
         return aux;
     }
 
-    public String join_game(String hash){
+    public String join_game(String hash) {
         serverInstance.SOCKET.emit("join_game", hash);
-        while(response_server == null){
-            try { Thread.sleep(1000); } catch (InterruptedException e) { }
+        while (response_server == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
         }
         String aux = response_server;
         response_server = null;
@@ -47,22 +51,24 @@ public class PlayerBusiness {
     }
 
     /**
-     *
      * @param rival is composed of identifier (master or guest) more code (hash).
      * @param move
      * @return
      */
-    public String do_play(String rival, JSONObject move){
+    public String do_play(String rival, JSONObject move) {
         serverInstance.SOCKET.emit("do_play", rival, move);
-        while(response_server == null){
-            try { Thread.sleep(1000); } catch (InterruptedException e) { }
+        while (response_server == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
         }
         String aux = response_server;
         response_server = null;
         return aux;
     }
 
-    public String updateGame(String hash){
+    public String updateGame(String hash) {
         return null;
     }
 }

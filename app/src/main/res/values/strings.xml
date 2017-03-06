@@ -4,13 +4,18 @@
 
 
     <string name="enter_code">Enter a Code:</string>
-    <string name="left_game">Left game?</string>
+    <string name="left_game">Quit the game?</string>
     <string name="hp">HP</string>
     <string name="energy">Energy</string>
 
     <!--Buttons-->
     <string name="btn_join">Join</string>
+    <string name="btn_exit">Exit</string>
+    <string name="btn_continue">Stay</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_ok">OK</string>
+    <string name="victory">You Win</string>
+    <string name="defeat">You Lose</string>
 
     <!-- Erros -->
     <string name="code_blank_error">Code cannot be blank</string>

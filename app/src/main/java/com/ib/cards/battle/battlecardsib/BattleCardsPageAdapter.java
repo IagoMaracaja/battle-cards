@@ -1,20 +1,13 @@
 package com.ib.cards.battle.battlecardsib;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -54,7 +47,7 @@ public class BattleCardsPageAdapter extends PagerAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, BattleRoundActivity.class);
-                intent.putExtra("card", (Serializable) card);
+                intent.putExtra("card", card);
                 mContext.startActivity(intent);
             }
         });

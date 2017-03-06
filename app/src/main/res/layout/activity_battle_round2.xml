@@ -35,16 +35,16 @@
             android:id="@+id/fab_cure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:colorNormal="#111211"
-            app:colorPressed="#b7beb7"
+            app:colorNormal="#e2dc1f"
+            app:colorPressed="#df2618"
             app:icon="@drawable/fab_cure" />
 
         <com.imangazaliev.circlemenu.CircleMenuButton
             android:id="@+id/fab_energy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:colorNormal="#111211"
-            app:colorPressed="#b7beb7"
+            app:colorNormal="#212121"
+            app:colorPressed="#28a5e9"
             app:icon="@drawable/fab_energy" />
 
 
