@@ -1,15 +1,18 @@
 package com.ib.cards.battle.battlecardsib;
 
+import java.io.Serializable;
+
 /**
  * Created by iago on 02/03/17.
  */
 
-public class Card {
+public class Card implements Serializable{
 
     private int hp;
     private int energy;
     private String category;
     private String magic;
+    private int magicPower;
     private int level;
     private int image;
     private String description;
@@ -86,5 +89,13 @@ public class Card {
 
     public void setPower(int power) {
         this.power = power;
+    }
+
+    public int getMagicPower() {
+        return magicPower;
+    }
+
+    public void setMagicPower(int magicPower) {
+        this.magicPower = magicPower;
     }
 }

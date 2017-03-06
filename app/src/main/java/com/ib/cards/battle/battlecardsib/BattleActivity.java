@@ -33,12 +33,13 @@ public class BattleActivity extends AppCompatActivity {
             Card card = new Card();
             card.setCategory("");
             card.setDescription("");
-            card.setEnergy(i+i);
-            card.setHp(i+1);
+            card.setEnergy(i*2);
+            card.setHp(1+i+card.getEnergy());
             card.setLevel(i);
             card.setMagic("");
             card.setName("Card 0" +i);
             card.setPower(i*2);
+            card.setMagicPower(card.getPower()+i);
             card.setImage(R.drawable.warrior);
             cards.add(card);
         }

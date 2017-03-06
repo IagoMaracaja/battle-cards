@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+
+    <include layout="@layout/activity_battle_round"></include>
+
+    <com.imangazaliev.circlemenu.CircleMenu
+        android:id="@+id/circleMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+        <com.imangazaliev.circlemenu.CircleMenuButton
+            android:id="@+id/magic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:colorNormal="#e42911"
+            app:colorPressed="#df2618"
+            app:icon="@drawable/fab_magic" />
+
+        <com.imangazaliev.circlemenu.CircleMenuButton
+            android:id="@+id/attack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:colorNormal="#111211"
+            app:colorPressed="#b7beb7"
+            app:icon="@drawable/fab_attack" />
+
+        <com.imangazaliev.circlemenu.CircleMenuButton
+            android:id="@+id/fab_cure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:colorNormal="#111211"
+            app:colorPressed="#b7beb7"
+            app:icon="@drawable/fab_cure" />
+
+        <com.imangazaliev.circlemenu.CircleMenuButton
+            android:id="@+id/fab_energy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:colorNormal="#111211"
+            app:colorPressed="#b7beb7"
+            app:icon="@drawable/fab_energy" />
+
+
+    </com.imangazaliev.circlemenu.CircleMenu>
+
+</FrameLayout>

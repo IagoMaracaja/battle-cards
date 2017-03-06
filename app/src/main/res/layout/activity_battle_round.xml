@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_battle_round"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -37,17 +37,154 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.3"></LinearLayout>
+                android:layout_weight="0.3">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/hp"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBarHPOpponent"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/custom_progressbar_hp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tv_actual_hp_op"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="X"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:id="@+id/tv_total_hp_op"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.3"></LinearLayout>
+                android:layout_weight="0.3">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/energy"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBarEnergyOpponent"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/custom_progressbar_energy" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tv_actual_energy_op"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="X"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:id="@+id/tv_total_energy_op"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.3"></LinearLayout>
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:id="@+id/tv_op_player_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Player name"
+                    android:textColor="@color/main_text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -68,17 +205,155 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.3"></LinearLayout>
+                android:layout_weight="0.3">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/hp"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBarHPMe"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/custom_progressbar_hp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tv_actual_hp_my"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="X"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:id="@+id/tv_total_hp_my"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.3"></LinearLayout>
+                android:layout_weight="0.3">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/energy"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBarEnergyMe"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/custom_progressbar_energy" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tv_actual_energy_my"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="X"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:id="@+id/tv_total_energy_my"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold|italic" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.3"></LinearLayout>
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:id="@+id/tv_my_player_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Player name"
+                    android:textColor="@color/main_text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -90,37 +365,5 @@
             android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
-
-    <com.imangazaliev.circlemenu.CircleMenu
-        android:id="@+id/circleMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-        <com.imangazaliev.circlemenu.CircleMenuButton
-            android:id="@+id/favorite"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:colorNormal="#2196F3"
-            app:colorPressed="#1E88E5"
-            app:icon="@drawable/spellbook" />
-
-        <com.imangazaliev.circlemenu.CircleMenuButton
-            android:id="@+id/search"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:colorNormal="#4CAF50"
-            app:colorPressed="#43A047"
-            app:icon="@drawable/power" />
-
-        <com.imangazaliev.circlemenu.CircleMenuButton
-            android:id="@+id/alert"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:colorNormal="#F44336"
-            app:colorPressed="#E53935"
-            app:icon="@drawable/heart" />
-
-    </com.imangazaliev.circlemenu.CircleMenu>
 
 </LinearLayout>

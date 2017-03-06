@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -46,13 +47,14 @@ public class BattleCardsPageAdapter extends PagerAdapter {
         final View view;
 
         view = mLayoutInflater.inflate(R.layout.card_item2, container, false);
-        Card card = mCards.get(position);
+        final Card card = mCards.get(position);
 
         container.addView(Util.adaptCardToView(view, card));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, BattleRoundActivity.class);
+                intent.putExtra("card", (Serializable) card);
                 mContext.startActivity(intent);
             }
         });
