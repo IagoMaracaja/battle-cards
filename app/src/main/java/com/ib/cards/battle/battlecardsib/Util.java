@@ -4,6 +4,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ib.cards.battle.battlecardsib.domain.Card;
+
 /**
  * Created by iago on 03/03/17.
  */
