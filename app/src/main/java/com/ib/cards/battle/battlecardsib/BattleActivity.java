@@ -2,9 +2,10 @@ package com.ib.cards.battle.battlecardsib;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
+import com.ib.cards.battle.battlecardsib.business.CardBusiness;
+import com.ib.cards.battle.battlecardsib.domain.Card;
 
 import java.util.ArrayList;
 
@@ -27,24 +28,9 @@ public class BattleActivity extends AppCompatActivity {
 
 
     public ArrayList<Card> generateMockItens(){
-        ArrayList<Card> cards = new ArrayList<>();
+        CardBusiness cardBusiness = new CardBusiness();
 
-        for (int i = 0; i < 9; i++){
-            Card card = new Card();
-            card.setCategory("");
-            card.setDescription("");
-            card.setEnergy(i*2);
-            card.setHp(1+i+card.getEnergy());
-            card.setLevel(i);
-            card.setMagic("");
-            card.setName("Card 0" +i);
-            card.setPower(i*2);
-            card.setMagicPower(card.getPower()+i);
-            card.setImage(R.drawable.warrior);
-            cards.add(card);
-        }
-
-        return cards;
+        return cardBusiness.getCards();
     }
 
 
