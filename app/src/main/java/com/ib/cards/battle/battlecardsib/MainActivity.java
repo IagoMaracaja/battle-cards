@@ -18,6 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ib.cards.battle.battlecardsib.business.Constants;
+import com.ib.cards.battle.battlecardsib.business.PlayerBusiness;
+import com.ib.cards.battle.battlecardsib.domain.Attack;
+import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
+
 public class MainActivity extends AppCompatActivity {
 
     protected Button mCreateNewGame;
@@ -59,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
             join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    ServerInstanceBusiness serverInstanceBusiness = ServerInstanceBusiness.getInstance();
+                    PlayerBusiness playerBusiness = PlayerBusiness.getInstance();
+                    playerBusiness.join_game(Constants.HASH_TEST);
+                    playerBusiness.do_play(Constants.MASTER+Constants.HASH_TEST, new Attack().parseToJson(Constants.attackGuest));
+
                     if (checkCode(code.getText().toString())) {
                         Toast.makeText(MainActivity.this, "Você entrará no jogo..so que agora nao :D",
                                 Toast.LENGTH_SHORT).show();
@@ -108,7 +118,12 @@ public class MainActivity extends AppCompatActivity {
         mCreateNewGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CountDownTimer(5000, 1000) {
+                openDialogAlpha(null);
+                PlayerBusiness playerBusiness = PlayerBusiness.getInstance();
+                playerBusiness.create_game(Constants.HASH_TEST);
+                Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
+                startActivity(sendToBattleActivity);
+                /*new CountDownTimer(5000, 1000) {
                     @Override
                     public void onTick(long l) {
 
@@ -120,8 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(sendToBattleActivity);
 
                     }
-                }.start();
-                openDialogAlpha(null);
+                }.start();*/
 
             }
         });

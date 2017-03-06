@@ -62,7 +62,7 @@ public class SocketCallbacksListener {
         @Override
         public void call(Object... args) {
             Attack attack = new Attack().parseToAttack((JSONObject) args[0]);
-            Log.d("AQUI", attack.getName());
+            Log.d("Jogada feita por: ", attack.getName());
         }
     };
 }
