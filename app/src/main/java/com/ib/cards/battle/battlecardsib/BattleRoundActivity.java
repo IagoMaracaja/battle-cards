@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ib.cards.battle.battlecardsib.business.CardBusiness;
+import com.ib.cards.battle.battlecardsib.business.Constants;
 import com.ib.cards.battle.battlecardsib.domain.Attack;
 import com.ib.cards.battle.battlecardsib.domain.Card;
 import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
@@ -179,10 +181,25 @@ public class BattleRoundActivity extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 Attack attack = new Attack().parseToAttack((JSONObject) args[0]);
-                // if is attack magic
-                receiveMagicAttack(attack.getMagic(),10);//trocar o 10 pela energia
-                // else if is physic attack
-                receiveNormalAttack(attack.getPower(),10);
+                int typeAttack = attack.getTypeAttack();
+                if(typeAttack== Constants.ATTACK_NORMAL){
+                    receiveNormalAttack(attack.getPower(), attack.getEnergy());
+                }
+                else if(typeAttack==Constants.ATTACK_MAGIC) {
+                    receiveMagicAttack(attack.getMagic(), attack.getEnergy());
+                }
+
+            }
+        });
+        instanceBusiness.SOCKET.on("receive_card", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Log.d("LOG", args[0]+"");
+                mOpCard = new CardBusiness().getCard(""+args[0]);
+                Log.d("LOG", mOpCard+"");
+                if(mOpCard==null){
+                    mOpCard = new Card();
+                }
 
             }
         });

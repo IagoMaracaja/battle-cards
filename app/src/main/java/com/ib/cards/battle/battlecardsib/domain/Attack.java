@@ -9,31 +9,29 @@ import org.json.JSONObject;
 
 public class Attack {
 
+    /**
+     * Name of card
+     */
     private String name;
     private int hp;
     private int power;
     private int magic;
+    private int energy;
     private int level;
     private int category;
+    private int typeAttack;
 
     public Attack(){}
 
-    /**
-     *
-     * @param name
-     * @param hp
-     * @param power
-     * @param magic
-     * @param level
-     * @param category
-     */
-    public Attack(String name, int hp, int power, int magic, int level, int category) {
+    public Attack(String name, int hp, int power, int magic, int energy, int level, int category, int typeAttack) {
         this.name = name;
         this.hp = hp;
         this.power = power;
         this.magic = magic;
+        this.energy = energy;
         this.level = level;
         this.category = category;
+        this.typeAttack = typeAttack;
     }
 
     public JSONObject parseToJson(Attack attack){
@@ -43,8 +41,10 @@ public class Attack {
             obj.put("hp", attack.getHp());
             obj.put("power", attack.getPower());
             obj.put("magic", attack.getMagic());
+            obj.put("energy", attack.getEnergy());
             obj.put("level", attack.getLevel());
             obj.put("category", attack.getCategory());
+            obj.put("typeAttack", attack.getTypeAttack());
             return obj;
         } catch (JSONException e) {
             return null;
@@ -58,8 +58,10 @@ public class Attack {
             attack.setHp(jsonObj.getInt("hp"));
             attack.setPower(jsonObj.getInt("power"));
             attack.setMagic(jsonObj.getInt("magic"));
+            attack.setEnergy(jsonObj.getInt("energy"));
             attack.setLevel(jsonObj.getInt("level"));
             attack.setCategory(jsonObj.getInt("category"));
+            attack.setTypeAttack(jsonObj.getInt("typeAttack"));
             return attack;
         } catch (JSONException e) {
             return null;
@@ -98,6 +100,14 @@ public class Attack {
         this.magic = magic;
     }
 
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
     public int getLevel() {
         return level;
     }
@@ -112,5 +122,13 @@ public class Attack {
 
     public void setCategory(int category) {
         this.category = category;
+    }
+
+    public int getTypeAttack() {
+        return typeAttack;
+    }
+
+    public void setTypeAttack(int typeAttack) {
+        this.typeAttack = typeAttack;
     }
 }

@@ -12,12 +12,16 @@ public class Constants {
 
     public static String GUEST = "guest_";
     public static String MASTER = "master_";
+    public static String RIVAL = "";
 
     public static String SUCCESS_MESSAGE_200 = "ok.";
     public static String ERROR_MESSAGE_500 = "Internal server error.";
     public static String ERROR_MESSAGE_508 = "Hash already exist.";
     public static String ERROR_MESSAGE_412 = "Game not found.";
 
+    //Type of attack
+    public static int ATTACK_NORMAL = 1;
+    public static int ATTACK_MAGIC = 2;
 
     //Definitions
     public static int LEVEL_MIN = 1;
@@ -28,6 +32,4 @@ public class Constants {
 
     //Tese: Remover quando a sala for criada dinamicamente
     public static String HASH_TEST = "ehnois";
-    public static Attack attackMaster = new Attack("Bruno", 50, 100, 20, 2, 1);
-    public static Attack attackGuest = new Attack("Iago", 50, 60, 60, 2, 1);
 }

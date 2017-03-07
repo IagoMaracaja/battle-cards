@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ib.cards.battle.battlecardsib.business.Constants;
 import com.ib.cards.battle.battlecardsib.domain.Card;
+import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
 
 import java.util.ArrayList;
 
@@ -50,6 +52,7 @@ public class BattleCardsPageAdapter extends PagerAdapter {
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, BattleRoundActivity.class);
                 intent.putExtra("card", card);
+                ServerInstanceBusiness.getInstance().SOCKET.emit("send_card", Constants.RIVAL, card.getName());
                 mContext.startActivity(intent);
             }
         });

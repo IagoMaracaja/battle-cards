@@ -64,18 +64,21 @@ public class MainActivity extends AppCompatActivity {
             join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ServerInstanceBusiness serverInstanceBusiness = ServerInstanceBusiness.getInstance();
-                    PlayerBusiness playerBusiness = PlayerBusiness.getInstance();
-                    playerBusiness.join_game(Constants.HASH_TEST);
-                    playerBusiness.do_play(Constants.MASTER+Constants.HASH_TEST, new Attack().parseToJson(Constants.attackGuest));
-
-                    if (checkCode(code.getText().toString())) {
+//TO DO Remover comentários do trecho de código a seguir
+                   /* if (checkCode(code.getText().toString())) {
                         Toast.makeText(MainActivity.this, "Você entrará no jogo..so que agora nao :D",
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         layoutError.setVisibility(View.VISIBLE);
                         errorMessage.setText(getString(R.string.code_blank_error));
-                    }
+                    }*/
+                    openDialogAlpha(null);
+                    ServerInstanceBusiness serverInstanceBusiness = ServerInstanceBusiness.getInstance();
+                    PlayerBusiness playerBusiness = PlayerBusiness.getInstance();
+                    playerBusiness.join_game(Constants.HASH_TEST);
+                    Constants.RIVAL = Constants.MASTER+Constants.HASH_TEST;
+                    Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
+                    startActivity(sendToBattleActivity);
                 }
             });
 
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 openDialogAlpha(null);
                 PlayerBusiness playerBusiness = PlayerBusiness.getInstance();
                 playerBusiness.create_game(Constants.HASH_TEST);
+                Constants.RIVAL = Constants.GUEST+Constants.HASH_TEST;
                 Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
                 startActivity(sendToBattleActivity);
                 /*new CountDownTimer(5000, 1000) {
