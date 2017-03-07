@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -15,11 +16,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ib.cards.battle.battlecardsib.domain.Attack;
 import com.ib.cards.battle.battlecardsib.domain.Card;
+import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
 import com.imangazaliev.circlemenu.CircleMenu;
 import com.imangazaliev.circlemenu.CircleMenuButton;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
+
+import org.json.JSONObject;
+
+import io.socket.emitter.Emitter;
 
 public class BattleRoundActivity extends AppCompatActivity {
 
@@ -134,6 +141,9 @@ public class BattleRoundActivity extends AppCompatActivity {
         layoutOpponent.addView(opponentCardView, 0);
         layoutMyCard.addView(myCardView, 0);
 
+        /**
+         * Ação de fazer um ataque fisico, magico, se curar e regenerar energia.
+         */
         CircleMenu circleMenu = (CircleMenu) findViewById(R.id.circleMenu);
         circleMenu.setOnItemClickListener(new CircleMenu.OnItemClickListener() {
             @Override
@@ -162,6 +172,19 @@ public class BattleRoundActivity extends AppCompatActivity {
                 }
             }
 
+        });
+
+        ServerInstanceBusiness instanceBusiness = ServerInstanceBusiness.getInstance();
+        instanceBusiness.SOCKET.on("update_game", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Attack attack = new Attack().parseToAttack((JSONObject) args[0]);
+                // if is attack magic
+                receiveMagicAttack(attack.getMagic(),10);//trocar o 10 pela energia
+                // else if is physic attack
+                receiveNormalAttack(attack.getPower(),10);
+
+            }
         });
 
 
@@ -418,6 +441,7 @@ public class BattleRoundActivity extends AppCompatActivity {
         if (hpResult <= 0) {
             defeat();
         }
+
     }
 
 }
