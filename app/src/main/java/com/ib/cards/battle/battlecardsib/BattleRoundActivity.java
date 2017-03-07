@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ib.cards.battle.battlecardsib.domain.Card;
 import com.imangazaliev.circlemenu.CircleMenu;
 import com.imangazaliev.circlemenu.CircleMenuButton;
 import com.romainpiel.shimmer.Shimmer;
@@ -184,7 +185,7 @@ public class BattleRoundActivity extends AppCompatActivity {
     }
 
     private void doMagicAttack() {
-        int power = this.mMyCard.getMagicPower();
+        int power = this.mMyCard.getMagic();
         int opHP = this.mOpCard.getHp();
         int hpResult = opHP - power;
         int energyResult = this.mMyCard.getEnergy() - 3; // apenas test
