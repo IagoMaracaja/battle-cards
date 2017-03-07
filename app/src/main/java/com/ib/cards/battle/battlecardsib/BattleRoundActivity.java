@@ -111,7 +111,6 @@ public class BattleRoundActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         mMyCard = (Card) b.get("card");
-        mOpCard = (Card) b.get("card");
 
         this.mMyTotalHP = mMyCard.getHp();
         mTvTotalHpMe.setText(Integer.toString(mMyTotalHP));

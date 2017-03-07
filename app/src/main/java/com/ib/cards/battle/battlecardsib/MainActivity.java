@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -20,8 +19,10 @@ import android.widget.Toast;
 
 import com.ib.cards.battle.battlecardsib.business.Constants;
 import com.ib.cards.battle.battlecardsib.business.PlayerBusiness;
-import com.ib.cards.battle.battlecardsib.domain.Attack;
 import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
+
+import static com.ib.cards.battle.battlecardsib.business.Constants.ONLINE_STATUS;
+import static com.ib.cards.battle.battlecardsib.business.Constants.READY_STATUS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,21 +65,27 @@ public class MainActivity extends AppCompatActivity {
             join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//TO DO Remover comentários do trecho de código a seguir
-                   /* if (checkCode(code.getText().toString())) {
-                        Toast.makeText(MainActivity.this, "Você entrará no jogo..so que agora nao :D",
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        layoutError.setVisibility(View.VISIBLE);
-                        errorMessage.setText(getString(R.string.code_blank_error));
-                    }*/
+
                     openDialogAlpha(null);
-                    ServerInstanceBusiness serverInstanceBusiness = ServerInstanceBusiness.getInstance();
                     PlayerBusiness playerBusiness = PlayerBusiness.getInstance();
-                    playerBusiness.join_game(Constants.HASH_TEST);
-                    Constants.RIVAL = Constants.MASTER+Constants.HASH_TEST;
-                    Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
-                    startActivity(sendToBattleActivity);
+                    String roomHash = playerBusiness.join_game(Constants.HASH_TEST);
+
+                    switch (roomHash) {
+                        case Constants.ERROR_MESSAGE_412:
+                            layoutError.setVisibility(View.VISIBLE);
+                            errorMessage.setText("Error while to join game.");
+                            break;
+                        default:
+                            Constants.RIVAL = Constants.MASTER + Constants.HASH_TEST;
+                            Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
+                            sendToBattleActivity.putExtra(Constants.HASH_KEY, roomHash);
+                            sendToBattleActivity.putExtra(Constants.FROM_JOIN, true);
+                            startActivity(sendToBattleActivity);
+                            ServerInstanceBusiness.getInstance().SOCKET.emit("send_status", Constants.RIVAL, ONLINE_STATUS);
+                            break;
+                    }
+
+
                 }
             });
 
@@ -123,23 +130,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 openDialogAlpha(null);
                 PlayerBusiness playerBusiness = PlayerBusiness.getInstance();
-                playerBusiness.create_game(Constants.HASH_TEST);
-                Constants.RIVAL = Constants.GUEST+Constants.HASH_TEST;
+                String roomHash = playerBusiness.create_game(Constants.HASH_TEST);
+                switch (roomHash) {
+                    case Constants.ERROR_MESSAGE_508:
+                        Toast.makeText(MainActivity.this, "Erro while creating game", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Constants.RIVAL = Constants.GUEST + Constants.HASH_TEST;
+                        Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
+                        sendToBattleActivity.putExtra(Constants.HASH_KEY, roomHash);
+                        sendToBattleActivity.putExtra(Constants.FROM_JOIN, false);
+                        startActivity(sendToBattleActivity);
+                        break;
+                }
+
+
+
                 Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
                 startActivity(sendToBattleActivity);
-                /*new CountDownTimer(5000, 1000) {
-                    @Override
-                    public void onTick(long l) {
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        Intent sendToBattleActivity = new Intent(MainActivity.this, BattleActivity.class);
-                        startActivity(sendToBattleActivity);
-
-                    }
-                }.start();*/
 
             }
         });
