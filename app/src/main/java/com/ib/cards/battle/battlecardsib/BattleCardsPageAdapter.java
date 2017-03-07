@@ -69,5 +69,6 @@ public class BattleCardsPageAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+
 }
 

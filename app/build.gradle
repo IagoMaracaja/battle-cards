@@ -32,5 +32,7 @@ dependencies {
     compile 'com.github.devlight:infinitecycleviewpager:1.0.2'
     compile 'com.github.imangazalievm:circlemenu:1.0.2'
     compile 'com.romainpiel.shimmer:library:1.4.0@aar'
+
+    compile 'com.github.sembozdemir:ViewPagerArrowIndicator:1.0.0'
     testCompile 'junit:junit:4.12'
 }

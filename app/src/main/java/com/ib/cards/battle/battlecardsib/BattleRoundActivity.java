@@ -74,6 +74,8 @@ public class BattleRoundActivity extends AppCompatActivity {
     private Dialog mProgressDialog;
 
     private boolean cardSended = false;
+    private ProgressBar mProgressBarOp;
+    private LinearLayout mLayoutOpponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +83,27 @@ public class BattleRoundActivity extends AppCompatActivity {
         setContentView(R.layout.activity_battle_round2);
 
         instantiate();
+        Log.d("xyz", "onCreate of BattleRound");
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!cardSended){
+                    ServerInstanceBusiness.getInstance().SOCKET.emit("send_card", Constants.RIVAL, mMyCard.getName());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                    }
+                }
+                cardSended = false;
+            }
+        }).start();
     }
 
     /**
@@ -100,6 +121,18 @@ public class BattleRoundActivity extends AppCompatActivity {
         mTvTotalEnergyMe = (TextView) findViewById(R.id.tv_total_energy_my);
         mTvActualEnergyMe = (TextView) findViewById(R.id.tv_actual_energy_my);
 
+        mTvTotalHpOp = (TextView) findViewById(R.id.tv_total_hp_op);
+        mTvActualHpOp = (TextView) findViewById(R.id.tv_actual_hp_op);
+        mTvActualEnergyOp = (TextView) findViewById(R.id.tv_actual_energy_op);
+        mTvTotalEnergyOp = (TextView) findViewById(R.id.tv_total_energy_op);
+
+        mHPProgressOp = (ProgressBar) findViewById(R.id.progressBarHPOpponent);
+        mEnergyProgressOp = (ProgressBar) findViewById(R.id.progressBarEnergyOpponent);
+
+        mHPProgressOp.setProgress(FULL);
+        mEnergyProgressOp.setProgress(FULL);
+
+        mProgressBarOp = (ProgressBar) findViewById(R.id.progress_bar);
 
         mHPProgressMe.setProgress(FULL);
         mEnergyProgressMe.setProgress(FULL);
@@ -201,24 +234,7 @@ public class BattleRoundActivity extends AppCompatActivity {
 
             }
         });
-        instanceBusiness.SOCKET.on("sended_card", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                cardSended = true;
-            }
-        });
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(!cardSended){
-                    ServerInstanceBusiness.getInstance().SOCKET.emit("send_card", Constants.RIVAL, mMyCard.getName());
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                    }
-                }
-            }
-        }).start();
+
 
 
     }
@@ -228,35 +244,27 @@ public class BattleRoundActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-                progressBar.setVisibility(View.GONE);
-
-                mTvTotalHpOp = (TextView) findViewById(R.id.tv_total_hp_op);
-                mTvActualHpOp = (TextView) findViewById(R.id.tv_actual_hp_op);
-                mTvActualEnergyOp = (TextView) findViewById(R.id.tv_actual_energy_op);
-                mTvTotalEnergyOp = (TextView) findViewById(R.id.tv_total_energy_op);
-
-                mHPProgressOp = (ProgressBar) findViewById(R.id.progressBarHPOpponent);
-                mEnergyProgressOp = (ProgressBar) findViewById(R.id.progressBarEnergyOpponent);
-
-                mHPProgressOp.setProgress(FULL);
-                mEnergyProgressOp.setProgress(FULL);
-
                 mOpTotalHP = mOpCard.getHp();
+
                 mTvTotalHpOp.setText(Integer.toString(mOpTotalHP));
                 mTvActualHpOp.setText(Integer.toString(mOpTotalHP));
 
+
                 mOpTotalEnergy = mOpCard.getEnergy();
+
                 mTvTotalEnergyOp.setText(Integer.toString(mOpTotalEnergy));
                 mTvActualEnergyOp.setText(Integer.toString(mOpTotalEnergy));
+
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 View opponentCardView = inflater.inflate(R.layout.card_item2_mini, null);
                 opponentCardView = Util.adaptCardToView(opponentCardView, mOpCard);
-                LinearLayout layoutOpponent = (LinearLayout) findViewById(R.id.ll_card_opponent);
-                layoutOpponent.addView(opponentCardView, 0);
-                layoutOpponent.setVisibility(View.VISIBLE);
+                mLayoutOpponent = (LinearLayout) findViewById(R.id.ll_card_opponent);
+                mLayoutOpponent.addView(opponentCardView, 0);
+
+                mProgressBarOp.setVisibility(View.GONE);
+                mLayoutOpponent.setVisibility(View.VISIBLE);
             }
 
         });
@@ -460,6 +468,9 @@ public class BattleRoundActivity extends AppCompatActivity {
     }
 
     private void defeat() {
+        mProgressBarOp.setVisibility(View.VISIBLE);
+        mLayoutOpponent.setVisibility(View.GONE);
+        mOpCard = null;
         super.onBackPressed();
     }
 

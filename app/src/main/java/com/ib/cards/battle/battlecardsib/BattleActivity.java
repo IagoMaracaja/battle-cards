@@ -2,6 +2,7 @@ package com.ib.cards.battle.battlecardsib;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,11 +12,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 import com.ib.cards.battle.battlecardsib.business.CardBusiness;
 import com.ib.cards.battle.battlecardsib.business.Constants;
 import com.ib.cards.battle.battlecardsib.domain.Card;
 import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
+import com.sembozdemir.viewpagerarrowindicator.library.ViewPagerArrowIndicator;
 
 import java.util.ArrayList;
 
@@ -81,7 +82,7 @@ public class BattleActivity extends AppCompatActivity {
         this.mOpponentUserStatus = (TextView) findViewById(R.id.tv_opponent_user_status);
 
         this.mLlOpponentView = (LinearLayout) findViewById(R.id.ll_opponent_view);
-        if(!isFromJoin){
+        if (!isFromJoin) {
             showHideNewUser(false);
         }
 
@@ -169,10 +170,20 @@ public class BattleActivity extends AppCompatActivity {
 
     private void initViewPager() {
         // Init viewpager
-        final HorizontalInfiniteCycleViewPager infiniteCycleViewPager =
+
+        adapterViewPager = new BattleCardsPageAdapter(BattleActivity.this, generateCards());
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPagerArrowIndicator viewPagerArrowIndicator = (ViewPagerArrowIndicator) findViewById(R.id.viewPagerArrowIndicator);
+        viewPager.setAdapter(adapterViewPager);
+
+        viewPagerArrowIndicator.bind(viewPager);
+        viewPagerArrowIndicator.setArrowIndicatorRes(R.drawable.left_arrow,
+                R.drawable.right_arrow);
+
+        /*final HorizontalInfiniteCycleViewPager infiniteCycleViewPager =
                 (HorizontalInfiniteCycleViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new BattleCardsPageAdapter(BattleActivity.this, generateCards());
-        infiniteCycleViewPager.setAdapter(adapterViewPager);
+        infiniteCycleViewPager.setAdapter(adapterViewPager);*/
     }
 
     /**
@@ -234,10 +245,10 @@ public class BattleActivity extends AppCompatActivity {
         }
     }
 
-    private void showHideNewUser(final boolean showNewUser){
-        if(showNewUser){
+    private void showHideNewUser(final boolean showNewUser) {
+        if (showNewUser) {
             mLlOpponentView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mLlOpponentView.setVisibility(View.GONE);
         }
 
