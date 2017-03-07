@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.ib.cards.battle.battlecardsib.business.CardBusiness;
 import com.ib.cards.battle.battlecardsib.business.Constants;
+import com.ib.cards.battle.battlecardsib.business.PlayerBusiness;
 import com.ib.cards.battle.battlecardsib.domain.Attack;
 import com.ib.cards.battle.battlecardsib.domain.Card;
 import com.ib.cards.battle.battlecardsib.socket.ServerInstanceBusiness;
@@ -65,12 +66,14 @@ public class BattleRoundActivity extends AppCompatActivity {
     private boolean alreadyUseEnergySpell;
 
 
-    private Card mOpCard;
+    private Card mOpCard = null;
     private Card mMyCard;
     private int mOpTotalEnergy;
     private int mMyTotalEnergy;
     private AlertDialog mAlertDialog;
     private Dialog mProgressDialog;
+
+    private boolean cardSended = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +89,7 @@ public class BattleRoundActivity extends AppCompatActivity {
      * init components views.
      */
     private void instantiate() {
-        mHPProgressOp = (ProgressBar) findViewById(R.id.progressBarHPOpponent);
         mHPProgressMe = (ProgressBar) findViewById(R.id.progressBarHPMe);
-        mEnergyProgressOp = (ProgressBar) findViewById(R.id.progressBarEnergyOpponent);
         mEnergyProgressMe = (ProgressBar) findViewById(R.id.progressBarEnergyMe);
 
         mOpPlayerName = (TextView) findViewById(R.id.tv_op_player_name);
@@ -99,14 +100,8 @@ public class BattleRoundActivity extends AppCompatActivity {
         mTvTotalEnergyMe = (TextView) findViewById(R.id.tv_total_energy_my);
         mTvActualEnergyMe = (TextView) findViewById(R.id.tv_actual_energy_my);
 
-        mTvTotalHpOp = (TextView) findViewById(R.id.tv_total_hp_op);
-        mTvActualHpOp = (TextView) findViewById(R.id.tv_actual_hp_op);
-        mTvActualEnergyOp = (TextView) findViewById(R.id.tv_actual_energy_op);
-        mTvTotalEnergyOp = (TextView) findViewById(R.id.tv_total_energy_op);
 
-        mHPProgressOp.setProgress(FULL);
         mHPProgressMe.setProgress(FULL);
-        mEnergyProgressOp.setProgress(FULL);
         mEnergyProgressMe.setProgress(FULL);
 
         Bundle b = getIntent().getExtras();
@@ -116,30 +111,20 @@ public class BattleRoundActivity extends AppCompatActivity {
         mTvTotalHpMe.setText(Integer.toString(mMyTotalHP));
         mTvActualHpMe.setText(Integer.toString(mMyTotalHP));
 
-        this.mOpTotalHP = mOpCard.getHp();
-        mTvTotalHpOp.setText(Integer.toString(mOpTotalHP));
-        mTvActualHpOp.setText(Integer.toString(mOpTotalHP));
-
-        this.mMyTotalEnergy = mOpCard.getEnergy();
+        this.mMyTotalEnergy = mMyCard.getEnergy();
         mTvTotalEnergyMe.setText(Integer.toString(mMyTotalEnergy));
         mTvActualEnergyMe.setText(Integer.toString(mMyTotalEnergy));
 
-        this.mOpTotalEnergy = mOpCard.getEnergy();
-        mTvTotalEnergyOp.setText(Integer.toString(mOpTotalEnergy));
-        mTvActualEnergyOp.setText(Integer.toString(mOpTotalEnergy));
+
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View opponentCardView = inflater.inflate(R.layout.card_item2_mini, null);
         View myCardView = inflater.inflate(R.layout.card_item2_mini, null);
 
-        opponentCardView = Util.adaptCardToView(opponentCardView, mOpCard);
         myCardView = Util.adaptCardToView(myCardView, mMyCard);
 
-        LinearLayout layoutOpponent = (LinearLayout) findViewById(R.id.ll_card_opponent);
         LinearLayout layoutMyCard = (LinearLayout) findViewById(R.id.ll_my_card);
 
-        layoutOpponent.addView(opponentCardView, 0);
         layoutMyCard.addView(myCardView, 0);
 
         /**
@@ -175,17 +160,27 @@ public class BattleRoundActivity extends AppCompatActivity {
 
         });
 
-        ServerInstanceBusiness instanceBusiness = ServerInstanceBusiness.getInstance();
+        final ServerInstanceBusiness instanceBusiness = ServerInstanceBusiness.getInstance();
         instanceBusiness.SOCKET.on("update_game", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Attack attack = new Attack().parseToAttack((JSONObject) args[0]);
+                final Attack attack = new Attack().parseToAttack((JSONObject) args[0]);
                 int typeAttack = attack.getTypeAttack();
                 if(typeAttack== Constants.ATTACK_NORMAL){
-                    receiveNormalAttack(attack.getPower(), attack.getEnergy());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            receiveNormalAttack(attack.getPower(), attack.getEnergy());
+                        }
+                    });
                 }
                 else if(typeAttack==Constants.ATTACK_MAGIC) {
-                    receiveMagicAttack(attack.getMagic(), attack.getEnergy());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            receiveMagicAttack(attack.getMagic(), attack.getEnergy());
+                        }
+                    });
                 }
 
             }
@@ -193,19 +188,79 @@ public class BattleRoundActivity extends AppCompatActivity {
         instanceBusiness.SOCKET.on("receive_card", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.d("LOG", args[0]+"");
-                mOpCard = new CardBusiness().getCard(""+args[0]);
-                Log.d("LOG", mOpCard+"");
                 if(mOpCard==null){
-                    mOpCard = new Card();
+                    Log.d("LOG", args[0]+"");
+                    mOpCard = new CardBusiness().getCard(""+args[0]);
+                    Log.d("LOG", mOpCard+"");
+                    if(mOpCard==null){
+                        mOpCard = new Card();
+                    }
+                    showCardOp();
                 }
+                instanceBusiness.SOCKET.emit("card_received", Constants.RIVAL);
 
             }
         });
+        instanceBusiness.SOCKET.on("sended_card", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                cardSended = true;
+            }
+        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!cardSended){
+                    ServerInstanceBusiness.getInstance().SOCKET.emit("send_card", Constants.RIVAL, mMyCard.getName());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        }).start();
 
 
     }
 
+    private void showCardOp(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                progressBar.setVisibility(View.GONE);
+
+                mTvTotalHpOp = (TextView) findViewById(R.id.tv_total_hp_op);
+                mTvActualHpOp = (TextView) findViewById(R.id.tv_actual_hp_op);
+                mTvActualEnergyOp = (TextView) findViewById(R.id.tv_actual_energy_op);
+                mTvTotalEnergyOp = (TextView) findViewById(R.id.tv_total_energy_op);
+
+                mHPProgressOp = (ProgressBar) findViewById(R.id.progressBarHPOpponent);
+                mEnergyProgressOp = (ProgressBar) findViewById(R.id.progressBarEnergyOpponent);
+
+                mHPProgressOp.setProgress(FULL);
+                mEnergyProgressOp.setProgress(FULL);
+
+                mOpTotalHP = mOpCard.getHp();
+                mTvTotalHpOp.setText(Integer.toString(mOpTotalHP));
+                mTvActualHpOp.setText(Integer.toString(mOpTotalHP));
+
+                mOpTotalEnergy = mOpCard.getEnergy();
+                mTvTotalEnergyOp.setText(Integer.toString(mOpTotalEnergy));
+                mTvActualEnergyOp.setText(Integer.toString(mOpTotalEnergy));
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                View opponentCardView = inflater.inflate(R.layout.card_item2_mini, null);
+                opponentCardView = Util.adaptCardToView(opponentCardView, mOpCard);
+                LinearLayout layoutOpponent = (LinearLayout) findViewById(R.id.ll_card_opponent);
+                layoutOpponent.addView(opponentCardView, 0);
+                layoutOpponent.setVisibility(View.VISIBLE);
+            }
+
+        });
+    }
 
     private void doAttack() {
         int power = this.mMyCard.getPower();
@@ -214,6 +269,14 @@ public class BattleRoundActivity extends AppCompatActivity {
         int energyResult = this.mMyCard.getEnergy() - 1;
         mOpCard.setHp(hpResult);
         mMyCard.setEnergy(energyResult);
+        Attack attack = new Attack();
+        attack.setTypeAttack(Constants.ATTACK_NORMAL);
+        attack.setName(this.mMyCard.getName());
+        attack.setPower(this.mMyCard.getPower());
+        attack.setHp(this.mMyCard.getHp());
+        attack.setMagic(this.mMyCard.getMagic());
+        attack.setEnergy(this.mMyCard.getEnergy());
+        PlayerBusiness.getInstance().do_play(Constants.RIVAL, new Attack().parseToJson(attack));
 
         updateHPProgress(hpResult, false);
         updateEnergyProgress(energyResult, true);
@@ -230,6 +293,15 @@ public class BattleRoundActivity extends AppCompatActivity {
         int energyResult = this.mMyCard.getEnergy() - 3; // apenas test
         mOpCard.setHp(hpResult);
         mMyCard.setEnergy(energyResult);
+
+        Attack attack = new Attack();
+        attack.setTypeAttack(Constants.ATTACK_MAGIC);
+        attack.setName(this.mMyCard.getName());
+        attack.setPower(this.mMyCard.getPower());
+        attack.setMagic(this.mMyCard.getMagic());
+        attack.setHp(this.mMyCard.getHp());
+        attack.setEnergy(this.mMyCard.getEnergy());
+        PlayerBusiness.getInstance().do_play(Constants.RIVAL, new Attack().parseToJson(attack));
 
         updateHPProgress(hpResult, false);
         updateEnergyProgress(energyResult, true);
